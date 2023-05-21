@@ -4,7 +4,9 @@ import isodate
 
 from googleapiclient.discovery import build
 
+import isodate
 
+from helper.youtube_api_manual import printj
 
 class Channel:
     """Класс для ютуб-канала"""
@@ -19,4 +21,12 @@ class Channel:
         """Выводит в консоль информацию о канале."""
         return json.dumps(dict_to_print, indent=2, ensure_ascii=False)
 
+        @classmethod
+        def get_service():
+            return Channel
+
+    def to_json(title, video_count, url):
+        file = open("file.json", "w")
+        file.write(title, video_count, url)
+        return file
 
