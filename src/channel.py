@@ -37,4 +37,32 @@ class Channel:
         file.write(title, video_count, url)
         return file
 
+    def __str__(self):
+        """Выведение названия канала и ссылки"""
+        return f'{self.channel_name}, {self.channel_link}'
+
+    def __add__(self, other):
+        """Метод для сложения колличества подписчиков каналов"""
+        return self.number_of_subscribers + other.number_of_subscribers
+
+    def __sub__(self, other):
+        """Метод для операции вычитания"""
+        return self.number_of_subscribers - other.number_of_subscribers
+
+    def __lt__(self, other):
+        """Для операции сравнения «меньше»"""
+        return self.number_of_subscribers < other.number_of_subscribers
+
+    def __le__(self, other):
+        """Для сравнения «меньше» или «равно»"""
+        return self.number_of_subscribers <= other.number_of_subscribers
+
+    def __gt__(self, other):
+        """Метод для операции сравнения «больше»"""
+        return self.number_of_subscribers > other.number_of_subscribers
+
+    def __ge__(self, other):
+        """Метод для операции сравнения «больше» или «равно»"""
+        return self.number_of_subscribers >= other.number_of_subscribers
+
 
