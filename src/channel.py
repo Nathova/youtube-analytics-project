@@ -13,6 +13,11 @@ class Channel:
     api_key: str = os.getenv('YT_API_KEY')
     youtube = build('youtube', 'v3', developerKey=api_key)
 
+    @classmethod
+    def get_service(cls):
+        """Класс-метод, возвращающий объект для работы с YouTube API"""
+        return cls.youtube
+
     def __init__(self, __channel_id: str) -> None
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
         self.__channel_id = str(__channel_id)
@@ -26,10 +31,6 @@ class Channel:
         self.view_count = channel["items"][0]["statistics"]["viewCount"]
 
 
-    @classmethod
-    def get_service(cls):
-        """Класс-метод, возвращающий объект для работы с YouTube API"""
-        return cls.youtube
 
     @property
     def channel_id(self):
