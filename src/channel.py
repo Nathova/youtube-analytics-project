@@ -1,10 +1,7 @@
 import json
 import os
-import isodate
 
 from googleapiclient.discovery import build
-
-import isodate
 
 
 class Channel:
@@ -49,27 +46,30 @@ class Channel:
 
     def __add__(self, other):
         """Метод для сложения колличества подписчиков каналов"""
-        return self.subscriber_count + other.number_of_subscribers
+        if not isinstance(other, Channel):
+            raise ValueError("Складывать можно только два объекта Channel.")
+        else:
+            return int(self.subscriber_count) + int(other.subscriber_count)
 
     def __sub__(self, other):
         """Метод для операции вычитания"""
-        return self.subscriber_count - other.number_of_subscribers
+        return int(self.subscriber_count) - int(other.number_of_subscribers)
 
     def __lt__(self, other):
         """Для операции сравнения «меньше»"""
-        return self.subscriber_count < other.number_of_subscribers
+        return int(self.subscriber_count) < int(other.number_of_subscribers)
 
     def __le__(self, other):
         """Для сравнения «меньше» или «равно»"""
-        return self.subscriber_count <= other.number_of_subscribers
+        return int(self.subscriber_count) <= int(other.number_of_subscribers)
 
     def __gt__(self, other):
         """Метод для операции сравнения «больше»"""
-        return self.subscriber_count > other.number_of_subscribers
+        return int(self.subscriber_count) > int(other.number_of_subscribers)
 
     def __ge__(self, other):
         """Метод для операции сравнения «больше» или «равно»"""
-        return self.subscriber_count >= other.number_of_subscribers
+        return int(self.subscriber_count) >= int(other.number_of_subscribers)
 
 
     def print_info(self) -> None:
