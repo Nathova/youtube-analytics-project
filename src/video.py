@@ -1,6 +1,7 @@
 import os
+import datetime
 from googleapiclient.discovery import build
-
+from datetime import timedelta
 
 class Video:
     """Класс для ютуб-канала"""
@@ -32,4 +33,15 @@ class PLVideo(Video):
     def __init__(self, video_id, playlist_id):
         super().__init__(video_id)
         self.playlist_id = playlist_id
+
+    @property
+    def total_duration(self):
+        """Возвращает объект класса datetime.timedelta с суммарной длительность плейлиста"""
+        self.timedelta = timedelta
+        datetime.timedelta = Video.timedelta()
+        return datetime.timedelta
+
+    def show_best_video(self):
+        return max(Video.like_count)
+
 

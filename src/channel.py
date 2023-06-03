@@ -53,23 +53,23 @@ class Channel:
 
     def __sub__(self, other):
         """Метод для операции вычитания"""
-        return int(self.subscriber_count) - int(other.number_of_subscribers)
+        return int(self.subscriber_count) - int(other.subscriber_count)
 
     def __lt__(self, other):
         """Для операции сравнения «меньше»"""
-        return int(self.subscriber_count) < int(other.number_of_subscribers)
+        return int(self.subscriber_count) < int(other.subscriber_count)
 
     def __le__(self, other):
         """Для сравнения «меньше» или «равно»"""
-        return int(self.subscriber_count) <= int(other.number_of_subscribers)
+        return int(self.subscriber_count) <= int(other.subscriber_count)
 
     def __gt__(self, other):
         """Метод для операции сравнения «больше»"""
-        return int(self.subscriber_count) > int(other.number_of_subscribers)
+        return int(self.subscriber_count) > int(other.subscriber_count)
 
     def __ge__(self, other):
         """Метод для операции сравнения «больше» или «равно»"""
-        return int(self.subscriber_count) >= int(other.number_of_subscribers)
+        return int(self.subscriber_count) >= int(other.subscriber_count)
 
 
     def print_info(self) -> None:
