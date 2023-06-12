@@ -1,25 +1,15 @@
 import json
-import os
-
-from googleapiclient.discovery import build
+from src.ytmixin import YTMixin
 
 
-class Channel:
+class Channel(YTMixin):
     """Класс для ютуб-канала"""
 
-    api_key: str = os.getenv('YT_API_KEY')
-    youtube = build('youtube', 'v3', developerKey=api_key)
-
-    @classmethod
-    def get_service(cls):
-        """Класс-метод, возвращающий объект для работы с YouTube API"""
-        return cls.youtube
-
-    def __init__(self, __channel_id: str) -> None:
+    def __init__(self, channel_id) -> None:
         """Экземпляр инициализируется id канала. Дальше все данные будут подтягиваться по API."""
-        self.__channel_id = str(__channel_id)
-        channel = Channel.get_service().channels().list(id=self.__channel_id, part='snippet,statistics').execute()
-
+        self.__channel_id = channel_id
+        channel = Channel.get_service().channels().list(id=self.channel_id, part='snippet,statistics').execute()
+        # новые атрибуты
         self.title = channel["items"][0]["snippet"]["title"]
         self.description = channel["items"][0]["snippet"]["description"]
         self.url = channel["items"][0]["snippet"]["thumbnails"]["default"]["url"]
@@ -27,60 +17,56 @@ class Channel:
         self.video_count = channel["items"][0]["statistics"]["videoCount"]
         self.view_count = channel["items"][0]["statistics"]["viewCount"]
 
+    def __str__(self):
+        return f'{self.title} ({self.url})'
 
+    def __add__(self, other):
+        if not isinstance(other, Channel):
+            raise ValueError('Складывать можно только два объекта Channel.')
+        else:
+            return int(self.subscriber_count) + int(other.subscriber_count)
+
+    def __sub__(self, other):
+        return int(self.subscriber_count) - int(other.subscriber_count)
+
+    def __rsub__(self, other):
+        return int(other.subscriber_count) - int(self.subscriber_count)
+
+    def __gt__(self, other):
+        return int(self.subscriber_count) > int(other.subscriber_count)
+
+    def __ge__(self, other):
+        return int(self.subscriber_count) >= int(other.subscriber_count)
+
+    def __lt__(self, other):
+        return int(self.subscriber_count) < int(other.subscriber_count)
+
+    def __le__(self, other):
+        return int(self.subscriber_count) <= int(other.subscriber_count)
+
+    def __eq__(self, other):
+        return int(self.subscriber_count) == int(other.subscriber_count)
 
     @property
     def channel_id(self):
         """Геттер для приватного атрибута channel_id"""
         return self.__channel_id
 
-    @channel_id.setter
-    def channel_id(self, channel_id):
-       """Сеттер для приватного атрибута channel_id"""
-       self.__channel_id = channel_id
-
-
-    def __str__(self):
-        """Выведение названия канала и ссылки"""
-        return f'{self.title}, {self.url}'
-
-    def __add__(self, other):
-        """Метод для сложения колличества подписчиков каналов"""
-        if not isinstance(other, Channel):
-            raise ValueError("Складывать можно только два объекта Channel.")
-        else:
-            return int(self.subscriber_count) + int(other.subscriber_count)
-
-    def __sub__(self, other):
-        """Метод для операции вычитания"""
-        return int(self.subscriber_count) - int(other.subscriber_count)
-
-    def __lt__(self, other):
-        """Для операции сравнения «меньше»"""
-        return int(self.subscriber_count) < int(other.subscriber_count)
-
-    def __le__(self, other):
-        """Для сравнения «меньше» или «равно»"""
-        return int(self.subscriber_count) <= int(other.subscriber_count)
-
-    def __gt__(self, other):
-        """Метод для операции сравнения «больше»"""
-        return int(self.subscriber_count) > int(other.subscriber_count)
-
-    def __ge__(self, other):
-        """Метод для операции сравнения «больше» или «равно»"""
-        return int(self.subscriber_count) >= int(other.subscriber_count)
+    #@channel_id.setter
+    #def channel_id(self, channel_id):
+       # """Сеттер для приватного атрибута channel_id"""
+       # self.__channel_id = channel_id
 
 
     def print_info(self) -> None:
-        """Выводит информацию о канале"""
-        channel = Channel.get_service().channels().list(id=self.__channel_id, part='snippet,statistics').execute()
+        """Выводит в консоль информацию о канале."""
+        channel = Channel.get_service().channels().list(id=self.channel_id, part='snippet,statistics').execute()
         info = json.dumps(channel, indent=2, ensure_ascii=False)
         print(info)
 
     def to_json(self, file_name):
         yt_dict = {}
-        yt_dict["id"] = self.__channel_id
+        yt_dict["id"] = self.channel_id
         yt_dict["title"] = self.title
         yt_dict["description"] = self.description
         yt_dict["url"] = self.url
@@ -89,6 +75,8 @@ class Channel:
         yt_dict["view_count"] = self.view_count
         with open(file_name, 'w', encoding="UTF-8") as file:
             json.dump(yt_dict, file, indent=2, ensure_ascii=False)
+
+
 
 
 
